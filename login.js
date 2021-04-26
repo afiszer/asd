@@ -4,6 +4,10 @@ document.getElementById('loginF').addEventListener('click', FacebookLogin)
 let provider1 = new firebase.auth.GoogleAuthProvider()
 let provider2 = new firebase.auth.FacebookAuthProvider()
 
+const usersRef = firebase
+  .firestore()
+  .collection('Users');
+
 
 function register(){
 
@@ -12,8 +16,15 @@ function register(){
 
     firebase.auth().createUserWithEmailAndPassword(emailr, passr)
     .then((userCredential) => {
+        
+        usersRef
+        .doc(`${userCredential.user.uid}`)
+        .set({
 
-      var user = userCredential.user;
+            email: emailr,
+            uid: userCredential.user.uid
+        
+        })
 
     })
     .catch((error) => {
